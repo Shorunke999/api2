@@ -17,8 +17,7 @@ class Controller extends BaseController
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required',
-            'user_type' => 'required'
+            'user' => 'required'
         ]);
         $user = User::where('email', $request->email)->first();
  
@@ -28,26 +27,26 @@ class Controller extends BaseController
             ]);
         }
     
-        return $user->createToken($request->device_name)->plainTextToken;
+        return $user->createToken($request->email)->plainTextToken;
     }
     public function Register(Request $request){
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'device_name' => 'required',
-            'user_type' => 'boolean',
         ]);
-        if($request->user_type == 'admin' ||$request->user_type =='user'){
-            $user = User::create([
+        $registered_user=\App\Models\User::where('email',$request->email)->first();
+        //return response()->json($registered_user);
+        if(!$registered_user){
+            $user = \App\Models\User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'device_name' => $request->device_name,
-                'user_type' => $request->user_type,
+                'user' => true,
             ]);
-            $token = $user->createToken($request->device_name)->plainTextToken;
+            $token = $user->createToken($request->email)->plainTextToken;
             return response()->json(['token' => $token]);
-
-        }
+         }else{
+            return response()->json(['msg'=>'email is already registered']);
+         }
     
         
     }
