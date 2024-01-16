@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
 
 class Controller extends BaseController
 {
@@ -33,16 +34,17 @@ class Controller extends BaseController
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'role'=> 'integer'
         ]);
         $registered_user=\App\Models\User::where('email',$request->email)->first();
-        //return response()->json($registered_user);
         if(!$registered_user){
             $user = \App\Models\User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'user' => true,
+                'role'=> 1,
             ]);
             $token = $user->createToken($request->email)->plainTextToken;
+            Mail::to($request->email)->send(new registeredMail());
             return response()->json(['token' => $token]);
          }else{
             return response()->json(['msg'=>'email is already registered']);
