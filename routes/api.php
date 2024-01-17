@@ -24,3 +24,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::post('/login',[\App\Http\Controllers\Controller::class ,'login']);
 Route::post('/Register',[\App\Http\Controllers\Controller::class ,'Register']);
+Route::get('/googleCallback', [\App\Http\Controllers\Googlecontroller::class ,'callback']);
