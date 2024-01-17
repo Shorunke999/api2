@@ -14,8 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    //return $request->user();
+    //routes to be protected (user and admin only)
+    Route::middleware('userAdmin')->group(function(){
+        //only admin can access this path
+    });
+
 });
 Route::post('/login',[\App\Http\Controllers\Controller::class ,'login']);
 Route::post('/Register',[\App\Http\Controllers\Controller::class ,'Register']);

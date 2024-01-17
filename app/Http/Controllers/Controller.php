@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\registeredMailjob;
 
 class Controller extends BaseController
 {
@@ -18,7 +19,7 @@ class Controller extends BaseController
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'user' => 'required'
+            'role' => 'integer'
         ]);
         $user = User::where('email', $request->email)->first();
  
@@ -27,7 +28,7 @@ class Controller extends BaseController
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-    
+        Mail::to($request->email)->send(new \App\Mail\new_mail());
         return $user->createToken($request->email)->plainTextToken;
     }
     public function Register(Request $request){
@@ -43,8 +44,8 @@ class Controller extends BaseController
                 'password' => Hash::make($request->password),
                 'role'=> 1,
             ]);
+            registeredMailjob::dispatch($request);
             $token = $user->createToken($request->email)->plainTextToken;
-            Mail::to($request->email)->send(new registeredMail());
             return response()->json(['token' => $token]);
          }else{
             return response()->json(['msg'=>'email is already registered']);
