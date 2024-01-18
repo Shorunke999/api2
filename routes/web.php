@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/googleCallback', [\App\Http\Controllers\Googlecontroller::class ,'callback']);
+Route::get('/googleredirect', [\App\Http\Controllers\Googlecontroller::class ,'redirect']);
