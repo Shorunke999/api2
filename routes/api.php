@@ -17,12 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     //return $request->user();
     //routes to be protected (user and admin only)
-    Route::middleware('userAdmin')->group(function(){
-        //only admin can access this path
-    });
+    Route::get('/index',[\App\Http\Controllers\putController::class ,'index']);
+    Route::post('/search',[\App\Http\Controllers\putController::class ,'search']);
+    Route::get('/show',[\App\Http\Controllers\putController::class ,'show']);
 
 });
 Route::post('/login',[\App\Http\Controllers\Controller::class ,'login']);
 Route::post('/Register',[\App\Http\Controllers\Controller::class ,'Register']);
-Route::get('/googleCallback', [\App\Http\Controllers\Googlecontroller::class ,'callback']);
-Route::post('/googleredirect', [\App\Http\Controllers\Googlecontroller::class ,'redirect']);

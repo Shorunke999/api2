@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('p_u_t', function (Blueprint $table) {
             $table->id('result_id');
-            $table->string('polling_unit_uniqueid',50);
+            $table->string('polling_unit_uniqueid',50)->nullable();
             $table->char('party_abbreviation',4);
             $table->integer('party_score');
-            $table->string('entered_by_user',50);
+            $table->string('entered_by_user',50)->nullable();
             $table->dateTime('date_entered');
             $table->timestamps();
-            $table->string('user_ip_address',50);
+            $table->string('user_ip_address',50)->nullable();
         });
     }
 

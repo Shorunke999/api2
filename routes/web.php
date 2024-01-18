@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
 Route::get('/googleCallback', [\App\Http\Controllers\Googlecontroller::class ,'callback']);
 Route::get('/googleredirect', [\App\Http\Controllers\Googlecontroller::class ,'redirect']);
+
+Route::middleware('userAdmin')->group(function(){
+    //only admin can access this route
+    Route::post('/store',[\App\Http\Controllers\putController::class ,'store']);
+    Route::put('/update',[\App\Http\Controllers\putController::class ,'update']);
+    
+    Route::delete('/delete',[\App\Http\Controllers\putController::class ,'delete']);
+});

@@ -18,7 +18,7 @@ class putResource extends JsonResource
             'result_id' => $this->result_id,
             'polling_unit_uniqueid' => $this->polling_unit_uniqueid,
             'party_abbreviation' => $this->party_abbreviation,
-            'result_id' => $this->result_id,
+            'entered_by_user' => $this->result_id,
             'party_score'=>$this->party_score
             ];
     }

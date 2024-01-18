@@ -13,10 +13,22 @@ class putController extends Controller
      */
     public function index()
     {
-        $data = p_u_t::paginate(15);
+        $data_db = p_u_t::all();
+        $data = $data_db->paginate(10);
         return new putResource($data);
     }
 
+    public function search(Request $request){
+        $request->validate([
+            'search_party_score'=> 'required'
+        ]);
+        $data_db= p_u_t::where('entered_by_user',LIKE,'%'.$request.'%')
+        ->orWhere('party_abbreviation',LIKE,'%'.$request.'%')
+        ->orWhere('party_score',LIKE,'%'.$request.'%')
+        ->get();
+        $data = $data_db->paginate(15);
+        return new putResource($data);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -30,7 +42,17 @@ class putController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'result_id' => 'required',
+            'polling_unit_uniqueid' => 'required|string',
+            'party_abbreviation' => 'required',
+            'party_score' => 'required',
+            'entered_by_user'=> 'required|string'
+        ]);
+        $saved_data = p_u_t::create($request);
+        return response()->json(['msg' => 'the data have been succesfully save']);
+
+
     }
 
     /**
@@ -38,7 +60,9 @@ class putController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data_db = p_u_t::where('result_id',$id)->get();
+        $data = $data_db->paginate(10);
+        return new putResource($data);
     }
 
     /**
@@ -54,7 +78,18 @@ class putController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //this could be access in the web ..
+        $request->validate([
+                'result_id' => 'required',
+                'polling_unit_uniqueid' => 'required|string',
+                'party_abbreviation' => 'required',
+                'party_score' => 'required',
+                'entered_by_user'=> 'required|string'
+        ]);
+        $data_db =p_u_t::find($id);
+        $data= $data_db->update($request);
+        return response()->json(['msg'=>'data has been updated']);
+
     }
 
     /**
@@ -62,6 +97,7 @@ class putController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data_db =p_u_t::find($id);
+        $data = $data_db->delete();
     }
 }
