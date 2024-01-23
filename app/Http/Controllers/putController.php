@@ -18,7 +18,8 @@ class putController extends Controller
         return new putResource($data);
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $request->validate([
             'search_party_score'=> 'required'
         ]);
@@ -26,7 +27,7 @@ class putController extends Controller
         ->orWhere('party_abbreviation',LIKE,'%'.$request.'%')
         ->orWhere('party_score',LIKE,'%'.$request.'%')
         ->get();
-        $data = $data_db->paginate(15);
+        $data = $data_db->paginate(10);
         return new putResource($data);
     }
     /**
@@ -65,12 +66,9 @@ class putController extends Controller
         return new putResource($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function page()
     {
-        //
+        return view('welcome');
     }
 
     /**

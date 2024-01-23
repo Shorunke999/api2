@@ -15,12 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    //return $request->user();
-    //routes to be protected (user and admin only)
-    Route::get('/index',[\App\Http\Controllers\putController::class ,'index']);
-    Route::post('/search',[\App\Http\Controllers\putController::class ,'search']);
-    Route::get('/show',[\App\Http\Controllers\putController::class ,'show']);
-
+    Route::resource('myapi',\App\Http\Controllers\putController::class)->except(['create','store','update']);
 });
 Route::post('/login',[\App\Http\Controllers\Controller::class ,'login']);
 Route::post('/Register',[\App\Http\Controllers\Controller::class ,'Register']);

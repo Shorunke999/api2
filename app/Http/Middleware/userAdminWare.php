@@ -15,7 +15,7 @@ class userAdminWare
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->role == 1){
+        if($request->user()->role == 1 && auth()->check()){
             return $next($request);
         }
         
