@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('myapi',\App\Http\Controllers\putController::class)->except(['create','store','update']);
+    Route::resource('myapi',\App\Http\Controllers\putController::class)->only(['index','search','show']);
 });
 Route::post('/login',[\App\Http\Controllers\Controller::class ,'login']);
 Route::post('/Register',[\App\Http\Controllers\Controller::class ,'Register']);

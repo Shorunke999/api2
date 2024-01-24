@@ -53,4 +53,38 @@ class Controller extends BaseController
     
         
     }
+    public function page(){
+        return view('welcome');
+    }
+    public function store(Request $request){
+        $request->validate([
+            'result_id' => 'required',
+            'polling_unit_uniqueid' => 'required|string',
+            'party_abbreviation' => 'required',
+            'party_score' => 'required',
+            'entered_by_user'=> 'required|string'
+        ]);
+        $saved_data = p_u_t::create($request);
+        return response()->json(['msg' => 'the data have been succesfully save']);
+    }
+
+    public function update(Request $request, string $id){
+        $request->validate([
+                'result_id' => 'required',
+                'polling_unit_uniqueid' => 'required|string',
+                'party_abbreviation' => 'required',
+                'party_score' => 'required',
+                'entered_by_user'=> 'required|string'
+        ]);
+        $data_db =p_u_t::findOrFail($id);
+       if(!$data_db){
+        return new modelException('data with the id is not available');
+       }else{
+        $data= $data_db->update($request);
+        return response()->json(['msg'=>'data has been updated']);
+       }
+    }
+    /*public function page(){
+        return view('welcome');
+    }*/
 }

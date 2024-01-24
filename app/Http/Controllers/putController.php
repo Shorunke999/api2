@@ -43,17 +43,6 @@ class putController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'result_id' => 'required',
-            'polling_unit_uniqueid' => 'required|string',
-            'party_abbreviation' => 'required',
-            'party_score' => 'required',
-            'entered_by_user'=> 'required|string'
-        ]);
-        $saved_data = p_u_t::create($request);
-        return response()->json(['msg' => 'the data have been succesfully save']);
-
-
     }
 
     /**
@@ -61,35 +50,13 @@ class putController extends Controller
      */
     public function show(string $id)
     {
-        $data_db = p_u_t::where('result_id',$id)->get();
-        $data = $data_db->paginate(10);
-        return new putResource($data);
+        $data_db = p_u_t::where('result_id',$id)->first();
+        if($data_db){
+            return new putResource($data_db);
+        }else{
+           return new modelException('resources does not exist');
+        }
     }
-
-    public function page()
-    {
-        return view('welcome');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //this could be access in the web ..
-        $request->validate([
-                'result_id' => 'required',
-                'polling_unit_uniqueid' => 'required|string',
-                'party_abbreviation' => 'required',
-                'party_score' => 'required',
-                'entered_by_user'=> 'required|string'
-        ]);
-        $data_db =p_u_t::find($id);
-        $data= $data_db->update($request);
-        return response()->json(['msg'=>'data has been updated']);
-
-    }
-
     /**
      * Remove the specified resource from storage.
      */
